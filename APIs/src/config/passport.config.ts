@@ -1,6 +1,6 @@
 import passport from 'passport';
 import { Strategy as JwtStrategy, ExtractJwt, StrategyOptions } from 'passport-jwt';
-import { env } from './env';
+import { env } from './env.config';
 import { User } from '../modules/users/user.model';
 
 const jwtOptions: StrategyOptions = {

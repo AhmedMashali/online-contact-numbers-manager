@@ -1,6 +1,6 @@
 import jwt, { SignOptions } from 'jsonwebtoken';
 import { AuthResponse, UserPayload } from './auth.types';
-import { env } from '../../config/env';
+import { env } from '../../config/env.config';
 import { User } from '../users/user.model';
 import * as userService from '../users/user.service';
 import { LoginDto } from './dto/login.dto';

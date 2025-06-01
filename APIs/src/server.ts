@@ -1,7 +1,7 @@
 // server.ts
 import app from './app';
-import connectDB from './config/db';
-import { env } from './config/env';
+import connectDB from './config/db.config';
+import { env } from './config/env.config';
 
 const runServer = async () => {
     try {
