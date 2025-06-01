@@ -11,6 +11,8 @@ const envSchema = Joi.object({
     MONGODB_URI: Joi.string().uri().required(),
     JWT_SECRET: Joi.string().min(10).required(),
     JWT_EXPIRE: Joi.string().pattern(jwtExpirePattern).default('1h'),
+    DEV_ORIGIN: Joi.string().uri().required(),
+    PROD_ORIGIN: Joi.string().uri().required(),
 }).unknown(true);
 
 const { value: envVars, error } = envSchema.validate(process.env);
@@ -29,4 +31,5 @@ export const env = {
         : envVars.JWT_EXPIRE,
     isProduction: envVars.NODE_ENV === 'production',
     isDevelopment: envVars.NODE_ENV === 'development',
+    ORIGINS: envVars.NODE_ENV === 'development' ? [envVars.DEV_ORIGIN] : [envVars.PROD_ORIGIN],
 };

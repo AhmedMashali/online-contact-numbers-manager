@@ -1,11 +1,16 @@
 import express, { Application } from 'express';
+import 'reflect-metadata';
+import cors from 'cors';
+
 import { errorHandler } from './middleware/error.middleware';
 import { passportInitialize } from './config/passport';
-import 'reflect-metadata';
 import routes from './modules';
 import { notFoundHandler } from './middleware/notFound.middleware';
+import corsOptions from './config/cors.config';
 
 const app: Application = express();
+
+app.use(cors(corsOptions));
 
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
