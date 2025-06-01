@@ -1,23 +1,41 @@
+// server.ts
 import app from './app';
-import { env } from './config/env';
 import connectDB from './config/db';
+import { env } from './config/env';
 
-const startServer = async () => {
+const runServer = async () => {
     try {
+        console.log(`${env.NODE_ENV} mode`);
         await connectDB();
 
         const server = app.listen(env.PORT, () => {
-            console.log(`Server running in ${env.NODE_ENV} mode on port ${env.PORT}`);
+            console.log(`Server running on port ${env.PORT}`);
         });
 
+        const shutdown = (signal: string) => {
+            console.log(`${signal} received. Shutting down gracefully...`);
+            server.close(() => {
+                console.log('Server closed');
+                process.exit(0);
+            });
+        };
+
+        process.on('SIGINT', shutdown);
+        process.on('SIGTERM', shutdown);
+
         process.on('unhandledRejection', (err: Error) => {
-            console.error(`Error: ${err.message}`);
-            server.close(() => process.exit(1));
+            console.error(`Unhandled Rejection: ${err.message}`);
+            shutdown('UnhandledRejection');
         });
-    } catch (error) {
-        console.error(`Failed to start server: ${(error as Error).message}`);
+
+        process.on('uncaughtException', (err: Error) => {
+            console.error(`Uncaught Exception: ${err.message}`);
+            process.exit(1);
+        });
+    } catch (err: any) {
+        console.error(`Startup error: ${err.message}`);
         process.exit(1);
     }
 };
 
-startServer();
+runServer();
